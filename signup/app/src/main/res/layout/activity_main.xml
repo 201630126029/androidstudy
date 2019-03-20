@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+<ralativelayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/signup_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginEnd="361dp"
+        android:layout_marginBottom="32dp"
+        android:text="注册"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/pwd_msg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/pwd_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username_msg"
+        android:hint="密码"
+        android:inputType="numberPassword"
+        app:layout_constraintBottom_toTopOf="@+id/rpwd_msg"
+        tools:layout_editor_absoluteX="32dp" />
+
+    <EditText
+        android:id="@+id/rpwd_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwd_msg"
+        android:hint="确认密码"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="331dp" />
+
+    <TextView
+        android:id="@+id/sex_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rpwd_msg"
+        android:layout_marginTop="8dp"
+        android:text="性别" />
+
+    <RadioGroup
+        android:id="@+id/rg_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rpwd_msg"
+        android:layout_toRightOf="@+id/sex_msg"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/sex_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="男" />
+
+        <RadioButton
+            android:id="@+id/sex_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="女" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/academic_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rg_sex"
+        android:layout_marginTop="10dp"
+        android:text="学历" />
+
+    <Spinner
+        android:id="@+id/academic_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rg_sex"
+        android:layout_toEndOf="@+id/academic_text"
+        android:layout_toRightOf="@+id/academic_text"
+        android:entries="@array/academic"
+        android:fadeScrollbars="true"
+        android:prompt="@string/academic_prompt"
+        android:spinnerMode="dialog"
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+    android:scrollIndicators="right">
+</Spinner>
+</ralativelayout>
+    <LinearLayout
+    android:id="@+id/hobby_msg"
+    android:layout_below="@+id/academic_msg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="爱好"/>
+    <CheckBox
+        android:id="@+id/hobby_swim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="游泳"/>
+    <CheckBox
+        android:id="@+id/hobby_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="音乐"/>
+    <CheckBox
+        android:id="@+id/hobby_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="读书"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hobby_msg"
+        android:layout_centerHorizontal="true"
+        android:text="注册"
+        android:onClick="onRegClick"/>
+
+    </LinearLayout>
+
+
+
+    </android.support.constraint.ConstraintLayout>

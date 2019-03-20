@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">signup</string>
+    <string name="signup_msg">signup_msg</string>
+    <string name="username_msg">username_msg</string>
+    <string name="pwd_msg">pwd_msg</string>
+    <string name="rpwd_msg">rpwd_msg</string>
+    <string name = "academic_prompt"> 请选择学历 </string>
+    <string-array name = "academic" >
+        <item> 博士 </item>
+        <item> 硕士 </item>
+        <item> 大学 </item>
+        <item>  高中</item>
+    </string-array>
+
+</resources>
