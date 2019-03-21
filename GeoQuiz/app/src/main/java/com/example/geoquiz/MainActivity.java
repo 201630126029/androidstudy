@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String KEY_INDEX = "index";
     private static final String TAG="QuizActivity";
     private static final String KEY_ANSWERED = "answered";
+    private int userAnswerCorrect=0;  //用户答对的数量
+    private static final String KEY_COREECT = "correct";
+    private int userAnsweredNum=0;  //用户已答的数量
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v){
                 checkAnswer(true);
+                showRecored();
             }
         });
         mFalseButton.setOnClickListener(new View.OnClickListener(){
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v){
                 checkAnswer(false);
+                showRecored();
             }
         });
         mNextButton = (ImageButton)findViewById(R.id.next_button);
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         int messageResId = 0;
         if(userPressedTrue == answerIsTrue){
             messageResId = R.string.correct_toast;
+            userAnswerCorrect++;
         }
         else{
             messageResId = R.string.incorrect_toast;
@@ -143,6 +149,24 @@ public class MainActivity extends AppCompatActivity {
         else {
             mTrueButton.setEnabled(true);
             mFalseButton.setEnabled(true);
+        }
+    }
+    private void showRecored(){
+        boolean allAnswered=true;
+        String message=null;
+        double correctMark=0;  //百分比形式的给分
+        int correctAnswerNum=0;  //答对的题目数量
+        for(int i=0; i<mQuestionBank.length; i++){
+            if(mQuestionBank[i].isAnswered() == false){
+                allAnswered=false;
+                break;
+            }
+        }
+        if(allAnswered==true){
+            correctMark=(double)userAnswerCorrect/mQuestionBank.length;
+            correctMark=(double)((int)(correctMark*10000)/100.0);
+            message="正确率："+String.valueOf(correctMark)+"%";
+            Toast.makeText(this, message,Toast.LENGTH_SHORT ).show();
         }
     }
 }
