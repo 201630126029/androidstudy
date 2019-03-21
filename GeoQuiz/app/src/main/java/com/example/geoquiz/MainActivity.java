@@ -1,6 +1,8 @@
 package com.example.geoquiz;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,13 +21,19 @@ public class MainActivity extends AppCompatActivity {
     private Button mFalseButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
+    private int mCurrentIndex=0;
     private TextView mQuestionTextView;
     public static final String KEY_INDEX = "index";
     private static final String TAG="QuizActivity";
     private static final String KEY_ANSWERED = "answered";
-    private int userAnswerCorrect=0;  //用户答对的数量
+    private int userAnswerCorrect=0;                                //用户答对的数量
     private static final String KEY_COREECT = "correct";
-    private int userAnsweredNum=0;  //用户已答的数量
+    private int userAnsweredNum=0;                                //用户已答的数量
+    private Button mCheatButton ;
+    private static final int REQUEST_CODE_CHEAT=0;
+    private boolean mIsCheater;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         mFalseButton=(Button)findViewById(R.id.false_button);
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
         mPrevButton = (ImageButton)findViewById(R.id.prev_button);
+        mNextButton = (ImageButton)findViewById(R.id.next_button);
+        mCheatButton=(Button)findViewById(R.id.cheat_button);
         mTrueButton.setOnClickListener(new View.OnClickListener(){
             @Override
 
@@ -59,11 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 showRecored();
             }
         });
-        mNextButton = (ImageButton)findViewById(R.id.next_button);
+
         mNextButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mCurrentIndex = (mCurrentIndex+1)%mQuestionBank.length;
+                mIsCheater=false;
                 updateQuestion();
             }
         });
@@ -82,6 +93,14 @@ public class MainActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+        mCheatButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                boolean answerIsTrue=mQuestionBank[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
+                startActivityForResult(intent, REQUEST_CODE_CHEAT);
+            }
+        });
     }
     private Question[] mQuestionBank = new Question[]{
             new Question(R.string.question_australia, true),
@@ -91,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             new Question(R.string.question_americas, true),
             new Question(R.string.question_asia,true)
     };
-    private int mCurrentIndex=0;
+
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
@@ -100,7 +119,10 @@ public class MainActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue){
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
-        if(userPressedTrue == answerIsTrue){
+        if(mIsCheater){
+            messageResId=R.string.judgement_toast;
+        }
+        else if(userPressedTrue == answerIsTrue){
             messageResId = R.string.correct_toast;
             userAnswerCorrect++;
         }
@@ -111,18 +133,22 @@ public class MainActivity extends AppCompatActivity {
         checkIfAnswered();
         Toast.makeText(this,messageResId, Toast.LENGTH_SHORT).show();
     }
+    @Override
     public void onStart(){
         super.onStart();
         Log.d(TAG, "onStart()called");
     }
+    @Override
     public void onResume(){
         super.onResume();
         Log.d(TAG, "onResume()called");
     }
+    @Override
     public void onPause(){
         super.onPause();
         Log.d(TAG, "onPause()called");
     }
+    @Override
     public void onStop(){
         super.onStop();
         Log.d(TAG, "onStop()called");
@@ -167,6 +193,18 @@ public class MainActivity extends AppCompatActivity {
             correctMark=(double)((int)(correctMark*10000)/100.0);
             message="正确率："+String.valueOf(correctMark)+"%";
             Toast.makeText(this, message,Toast.LENGTH_SHORT ).show();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode != Activity.RESULT_OK){
+            return ;
+        }
+        if(requestCode == REQUEST_CODE_CHEAT){
+            if(data == null){
+                return ;
+            }
+            mIsCheater=CheatActivity.wasAnswerShown(data);
         }
     }
 }
