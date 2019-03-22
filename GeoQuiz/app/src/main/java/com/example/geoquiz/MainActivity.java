@@ -34,13 +34,15 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CHEAT=0;
     private static final String KEY_ANSWER_SHOWN = "key_answer_shown";
     private TextView mCompileVersion;
-
+    private int mTotalShown;
+    private static final String KEY_TOTAL_SHOWN="totalshown";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bunble)called");
         setContentView(R.layout.activity_main);
         if(savedInstanceState != null){
+            mTotalShown = savedInstanceState.getInt(KEY_TOTAL_SHOWN, 0);
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             boolean answerIsAnswered[] = savedInstanceState.getBooleanArray(KEY_ANSWERED );
             boolean answerShown[]=savedInstanceState.getBooleanArray(KEY_ANSWER_SHOWN);
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 boolean answerIsTrue=mQuestionBank[mCurrentIndex].isAnswerTrue();
-                Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
+                Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue, mTotalShown);
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
             }
         });
@@ -172,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         }
         savedInstanceState.putBooleanArray(KEY_ANSWERED,answerIsAnswered);
         savedInstanceState.putBooleanArray(KEY_ANSWER_SHOWN,answerShown);
+        savedInstanceState.putInt(KEY_TOTAL_SHOWN, mTotalShown);
     }
 
 
@@ -207,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
                 mQuestionBank[mCurrentIndex].setAnswerShown(true);
                 isButtonVisible();
                 showRecored();
+                mTotalShown++;
             }
         }
     }

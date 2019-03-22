@@ -18,7 +18,7 @@ public class CheatActivity extends AppCompatActivity {
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
     private static final String EXTRA_ANSWER_SHOWN="com.example.geoquiz.answer_shown";
-
+    private static final String KEY_TOTAL_SHOWN="totalshown";
     @Override
 //    boolean answerIstrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 //                intent.putExtra(EXTRA_ANSWER_IS_TRUE,answerIstrue);
@@ -28,6 +28,10 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
         mAnswerTextView=(TextView)findViewById(R.id.answer_text_view);
         mShowAnswerButton=(Button)findViewById(R.id.show_answer_button);
+        final int mTotalShown = getIntent().getIntExtra(KEY_TOTAL_SHOWN, 0);
+        if(mTotalShown >= 3){
+            mShowAnswerButton.setEnabled(false);
+        }
         mShowAnswerButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -37,23 +41,27 @@ public class CheatActivity extends AppCompatActivity {
                 else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
-                setAnswerShownResult(true);
+                setAnswerShownResult(true, mTotalShown+1);
             }
         });
+
     }
-    public static Intent newIntent(Context packageContext, boolean answerIstrue){
+    public static Intent newIntent(Context packageContext, boolean answerIstrue, int mTotalShown){
         Intent intent = new Intent(packageContext, CheatActivity.class);
         intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIstrue);
+        intent.putExtra(KEY_TOTAL_SHOWN,mTotalShown );
         return intent;
     }
 
-    private void setAnswerShownResult(boolean isAnswerShown){
+    private void setAnswerShownResult(boolean isAnswerShown, int mTotalShown){
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        data.putExtra(KEY_TOTAL_SHOWN, mTotalShown);
         setResult(RESULT_OK, data);
     }
 
     public   static boolean wasAnswerShown(Intent result){
         return result.getBooleanExtra(EXTRA_ANSWER_SHOWN,false);
     }
+
 }
