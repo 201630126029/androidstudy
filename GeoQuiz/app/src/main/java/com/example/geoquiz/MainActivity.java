@@ -3,6 +3,7 @@ package com.example.geoquiz;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mCheatButton ;
     private static final int REQUEST_CODE_CHEAT=0;
     private static final String KEY_ANSWER_SHOWN = "key_answer_shown";
-
+    private TextView mCompileVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         mPrevButton = (ImageButton)findViewById(R.id.prev_button);
         mNextButton = (ImageButton)findViewById(R.id.next_button);
         mCheatButton=(Button)findViewById(R.id.cheat_button);
+        mCompileVersion = (TextView)findViewById(R.id.compile_version);
+        mCompileVersion.setText(Build.VERSION.SDK_INT);
         mTrueButton.setOnClickListener(new View.OnClickListener(){
             @Override
 
