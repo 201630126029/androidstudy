@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private int userAnsweredNum=0;                                //用户已答的数量
     private Button mCheatButton ;
     private static final int REQUEST_CODE_CHEAT=0;
-    private boolean mIsCheater;
+    private static final String KEY_ANSWER_SHOWN = "key_answer_shown";
 
 
     @Override
@@ -42,8 +42,10 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
             boolean answerIsAnswered[] = savedInstanceState.getBooleanArray(KEY_ANSWERED );
+            boolean answerShown[]=savedInstanceState.getBooleanArray(KEY_ANSWER_SHOWN);
             for(int i=0; i<mQuestionBank.length; i++){
                 mQuestionBank[i].setAnswered(answerIsAnswered[i]);
+                mQuestionBank[i].setAnswerShown(answerShown[i]);
             }
         }
 
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v){
                 checkAnswer(false);
-                showRecored();
+               showRecored();
             }
         });
 
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 mCurrentIndex = (mCurrentIndex+1)%mQuestionBank.length;
-                mIsCheater=false;
                 updateQuestion();
             }
         });
@@ -114,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
-        checkIfAnswered();
+        isButtonVisible();
     }
     private void checkAnswer(boolean userPressedTrue){
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
-        if(mIsCheater){
+        if(mQuestionBank[mCurrentIndex].isAnswerShown()){
             messageResId=R.string.judgement_toast;
         }
         else if(userPressedTrue == answerIsTrue){
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             messageResId = R.string.incorrect_toast;
         }
         mQuestionBank[mCurrentIndex].setAnswered(true);
-        checkIfAnswered();
+        isButtonVisible();
         Toast.makeText(this,messageResId, Toast.LENGTH_SHORT).show();
     }
     @Override
@@ -160,23 +161,16 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
         boolean answerIsAnswered[]=new boolean[mQuestionBank.length];
+        boolean answerShown[]=new boolean[mQuestionBank.length];
         for(int i=0; i<mQuestionBank.length; i++){
             answerIsAnswered[i]=mQuestionBank[i].isAnswered();
+            answerShown[i]=mQuestionBank[i].isAnswerShown();
         }
         savedInstanceState.putBooleanArray(KEY_ANSWERED,answerIsAnswered);
+        savedInstanceState.putBooleanArray(KEY_ANSWER_SHOWN,answerShown);
     }
 
-    private void checkIfAnswered(){
-        boolean answerIsAnswered = mQuestionBank[mCurrentIndex].isAnswered();
-        if(answerIsAnswered == true){
-            mTrueButton.setEnabled(false);
-            mFalseButton.setEnabled(false);
-        }
-        else {
-            mTrueButton.setEnabled(true);
-            mFalseButton.setEnabled(true);
-        }
-    }
+
     private void showRecored(){
         boolean allAnswered=true;
         String message=null;
@@ -204,7 +198,25 @@ public class MainActivity extends AppCompatActivity {
             if(data == null){
                 return ;
             }
-            mIsCheater=CheatActivity.wasAnswerShown(data);
+            boolean mIsCheater=CheatActivity.wasAnswerShown(data);
+            if(mIsCheater){
+                mQuestionBank[mCurrentIndex].setAnswerShown(true);
+                isButtonVisible();
+                showRecored();
+            }
+        }
+    }
+
+    protected void isButtonVisible(){
+        boolean mAnswerShown = mQuestionBank[mCurrentIndex].isAnswerShown();
+        boolean mAnswered = mQuestionBank[mCurrentIndex].isAnswered();
+        if(mAnswered || mAnswerShown){
+            mTrueButton.setEnabled(false);
+            mFalseButton.setEnabled(false);
+        }
+        else {
+            mTrueButton.setEnabled(true);
+            mFalseButton.setEnabled(true);
         }
     }
 }
