@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         mNextButton = (ImageButton)findViewById(R.id.next_button);
         mCheatButton=(Button)findViewById(R.id.cheat_button);
         mCompileVersion = (TextView)findViewById(R.id.compile_version);
-        mCompileVersion.setText(Build.VERSION.SDK_INT);
+        String version = String.valueOf(Build.VERSION.SDK_INT);
+        mCompileVersion.setText("API-Version:"+version);
         mTrueButton.setOnClickListener(new View.OnClickListener(){
             @Override
 
