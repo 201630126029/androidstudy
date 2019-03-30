@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,9 +47,44 @@ public class CrimeListFragment  extends Fragment {
             Toast.makeText(getActivity(), mCrime.getTitle()+"click", Toast.LENGTH_SHORT).show();
         }
     }
-    private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
-        private List<Crime> mCrimes;
+    private class PoliceHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private TextView mTitleTextView;
+        private TextView mDateTextView;
+        private Crime mCrime;
+        private Button mCallPolice;
 
+        public PoliceHolder(LayoutInflater inflater, ViewGroup parent) {
+
+            super(inflater.inflate(R.layout.list_item_police_crime, parent, false));
+            itemView.setOnClickListener(this);
+            mTitleTextView = (TextView)itemView.findViewById(R.id.crime_title);
+            mDateTextView = (TextView)itemView.findViewById(R.id.crime_date);
+            //绑定按钮
+            mCallPolice = (Button)itemView.findViewById(R.id.call_police);
+            //点击的时候显示一段文字
+            mCallPolice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(),"已经联系了警察了",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getActivity(),mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT).show();
+        }
+
+        public void bind(Crime crime){
+            mCrime = crime;
+            mTitleTextView.setText(mCrime.getTitle());
+            mDateTextView.setText(mCrime.getDate().toString());
+        }
+    }
+    private class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+        private List<Crime> mCrimes;
+        private boolean viewType;
         public CrimeAdapter(List<Crime> crimes){
             mCrimes=crimes;
         }
@@ -56,22 +92,44 @@ public class CrimeListFragment  extends Fragment {
         @NonNull
         @Override
         //需要新的ViewHolder来显示列表项时，调用此方法
-        public CrimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             LayoutInflater layoutinflater = LayoutInflater.from(getActivity());
-            return new CrimeHolder(layoutinflater, parent);
+            //根据getViewType函数里面的设置的viewType的值，调用不同的holder
+            if(viewType == true){
+                return new PoliceHolder(layoutinflater, parent);
+            }
+            else{
+                return new CrimeHolder(layoutinflater, parent);
+            }
         }
 
         @Override
         //注意这里传的参数是crimeHolder，第一个应该是显示的view，第二个是处于整个List的第几个
-        public void onBindViewHolder(@NonNull CrimeHolder crimeHolder, int i) {  //更换工作
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {  //进行更换工作
              Crime crime = mCrimes.get(i);
-             crimeHolder.bind(crime);
-
+            if(this.getItemViewType(i) == 1) {
+                ((PoliceHolder)viewHolder).bind(crime);
+            }
+            else{
+                ((CrimeHolder)viewHolder).bind(crime);
+            }
         }
 
         @Override
         public int getItemCount() {  //返回整个链表的元素个数
             return mCrimes.size();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if(mCrimes.get(position).isRequiresPolice() == true){
+                viewType=true;
+                return 1;
+            }
+            else{
+                viewType=false;
+                return 0;
+            }
         }
     }
 
