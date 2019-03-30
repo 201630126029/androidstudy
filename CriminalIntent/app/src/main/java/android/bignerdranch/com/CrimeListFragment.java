@@ -54,8 +54,7 @@ public class CrimeListFragment  extends Fragment {
             mSolvedImageView.setVisibility(crime.isSolved()?View.VISIBLE:View.GONE);
         }
         public void onClick(View v){
-            Intent intent =  CrimeActivity.newIntent(getActivity(), mCrime.getId());
-            itemPosition = getAdapterPosition();
+            Intent intent =  CrimePageActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
     }
