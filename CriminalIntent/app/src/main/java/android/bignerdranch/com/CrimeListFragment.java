@@ -1,5 +1,6 @@
 package android.bignerdranch.com;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import java.util.List;
 public class CrimeListFragment  extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    public static int itemPosition;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         //这里是将布局转换成具体的对象，container为父级可选视图
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
@@ -34,6 +36,7 @@ public class CrimeListFragment  extends Fragment {
         private TextView mDateTextView;
         private Crime mCrime;
         private ImageView mSolvedImageView;
+
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             //转换成视图,每个小view也对应一个视图，这里是list_item_crime
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
@@ -51,7 +54,9 @@ public class CrimeListFragment  extends Fragment {
             mSolvedImageView.setVisibility(crime.isSolved()?View.VISIBLE:View.GONE);
         }
         public void onClick(View v){
-            Toast.makeText(getActivity(), mCrime.getTitle()+"click", Toast.LENGTH_SHORT).show();
+            Intent intent =  CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            itemPosition = getAdapterPosition();
+            startActivity(intent);
         }
     }
 
@@ -87,7 +92,17 @@ public class CrimeListFragment  extends Fragment {
     private void upDateUI(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes= crimeLab.getCrimes();
-        mAdapter= new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);  //为RecycleView设置Adapter
+        if(mAdapter == null){
+            mAdapter= new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);  //为RecycleView设置Adapter
+        }
+        else{
+            mAdapter.notifyItemChanged(itemPosition);
+        }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        upDateUI();
     }
 }

@@ -41,7 +41,7 @@ public class CrimeLab {
     }
     public Crime getCrime(UUID id){  //找对应UUID的Crime对象，没有则返回null
         for(Crime crime:mCrimes){
-            if(crime.getId() == id){
+            if(crime.getId().equals(id)){
                 return crime;
             }
         }
