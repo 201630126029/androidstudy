@@ -1,7 +1,10 @@
 package android.bignerdranch.com;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -22,6 +26,8 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
+    private static final int REQUEST_DATE=0;
+    private static final String DIALOG_DATA="DialogDate";
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -34,8 +40,9 @@ public class CrimeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
         mTitleField = (EditText)v.findViewById(R.id.crime_title);//得到组件
         mDateButton=(Button)v.findViewById(R.id.crime_date);
+        updateDate();
         mSolvedCheckBox=(CheckBox)v.findViewById(R.id.crime_solved);
-
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -53,8 +60,19 @@ public class CrimeFragment extends Fragment {
 
             }
         });
-        mSolvedCheckBox.setChecked(mCrime.isSolved());
-//        mDateButton.setEnabled(false);
+
+        mDateButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                FragmentManager manager = getFragmentManager();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                Log.e("测试点", "1");
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+                dialog.show(manager, DIALOG_DATA);
+                Log.e("测试点", "2");
+            }
+        });
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {//监听多选框
@@ -69,5 +87,24 @@ public class CrimeFragment extends Fragment {
         CrimeFragment fragment = new CrimeFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.e("测试点", "5");
+        if(resultCode != Activity.RESULT_OK){
+            Log.e("测试点", "3");
+            return ;
+        }
+        if(requestCode == REQUEST_DATE){
+            Log.e("测试点", "4");
+            Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            updateDate();
+            Log.e("测试点", mCrime.getDate().toString());
+        }
+    }
+
+    private void updateDate() {
+        mDateButton.setText(mCrime.getDate().toString());
     }
 }
