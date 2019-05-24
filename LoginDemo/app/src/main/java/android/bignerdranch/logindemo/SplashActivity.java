@@ -13,9 +13,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        /**
+         * 这里其实不晓得什么意思
+         */
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        /**
+         * 这里原来还有Handle的postDelayed方法来执行一个线程
+         */
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

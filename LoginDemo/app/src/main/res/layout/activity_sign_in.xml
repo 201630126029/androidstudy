@@ -6,36 +6,38 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     tools:context=".Sign_in">
+
     <TextView
         android:id="@+id/signup_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="注册"
-        android:textSize="25sp"
-        android:layout_margin="25dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_margin="25dp"
+        android:text="@string/register"
+        android:textSize="25sp" />
+
     <EditText
         android:id="@+id/username_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/signup_msg"
-        android:singleLine="true"
-        android:hint="用户名"/>
+        android:hint="@string/username"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/pwd_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username_msg"
-        android:hint="密码"
+        android:hint="@string/password"
         android:inputType="textPassword" />
+
     <EditText
         android:id="@+id/rpwd_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pwd_msg"
-        android:hint="确认密码"
+        android:hint="@string/confirm_password"
         android:inputType="textPassword" />
 
     <TextView
@@ -44,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rpwd_msg"
         android:layout_marginTop="10dp"
-        android:text="性别"/>
+        android:text="@string/sex" />
 
     <RadioGroup
         android:id="@+id/rg_sex"
@@ -60,28 +62,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="男" />
+            android:text="@string/male" />
 
         <RadioButton
             android:id="@+id/sex_female"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="女" />
+            android:text="@string/female" />
     </RadioGroup>
+
     <TextView
         android:id="@+id/academic_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="学历"
         android:layout_below="@+id/rg_sex"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:text="@string/education" />
 
+    <!--spinner是下拉框-->
     <Spinner
         android:id="@+id/academic_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/academic_text"
         android:layout_below="@+id/rg_sex"
+        android:layout_alignBaseline="@+id/academic_text"
         android:layout_toEndOf="@+id/academic_text"
         android:layout_toRightOf="@+id/academic_text"
         android:entries="@array/academic"
@@ -89,48 +93,52 @@
         android:prompt="@string/academic_prompt"
         android:scrollIndicators="right"
         android:spinnerMode="dialog">
-
     </Spinner>
+
     <LinearLayout
         android:id="@+id/hobby_msg"
-        android:layout_below="@+id/academic_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/academic_msg"
         android:layout_marginTop="10dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="爱好"/>
+            android:text="@string/hobby" />
+
         <CheckBox
             android:id="@+id/hobby_swim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="游泳"/>
+            android:text="@string/swim" />
+
         <CheckBox
             android:id="@+id/hobby_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="音乐"/>
+            android:text="@string/music" />
+
         <CheckBox
             android:id="@+id/hobby_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="读书"/>
+            android:text="@string/reading" />
     </LinearLayout>
+
     <Button
         android:id="@+id/signover_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/hobby_msg"
         android:layout_centerHorizontal="true"
-        android:text="注册"
-        android:onClick="onRegClick"/>
+        android:onClick="onRegClick"
+        android:text="@string/register" />
 
     <TextView
         android:id="@+id/showMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below = "@+id/signover_button"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_below="@+id/signover_button"
+        android:layout_marginTop="20dp" />
 </RelativeLayout>
