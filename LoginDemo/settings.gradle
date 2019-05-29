@@ -1,1 +1,1 @@
-include ':app', ':myapplication', ':activitytest1', ':activity5'
+include ':app', ':myapplication', ':activitytest1', ':activity5', ':activity6', ':activity9', ':intent'
