@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="bgcolor">
+        <item>0xbbe24a83</item>
+    </integer-array>
+    <string-array name="word">
+
+    </string-array>
+</resources>
