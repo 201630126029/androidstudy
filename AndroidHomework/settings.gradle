@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':homewordk_6_2', ':yunxingshiquanxian', ':databaseprovider', ':providertest', ':media', ':cameraalbumtest', ':home_fragment', ':datasave', ':loginandregister', ':home_music', ':home_asynctask', ':home_xingyundachoujiang', ':home_jingdutiao', ':home_download', ':home_json', ':gsondemo'

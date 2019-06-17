@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         initViews();    //初始化控件
@@ -86,17 +86,17 @@ public class MainActivity extends AppCompatActivity {
     //初始化控件
     private void initViews() {
         //FrameLayout frag_layout = (FrameLayout) findViewById(R.id.frag_layout);
-        mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
+        mViewPager = findViewById(R.id.id_viewpager);
 
-        mTabWechat = (LinearLayout) findViewById(R.id.id_tab_wechat);
-        mTabFriend = (LinearLayout) findViewById(R.id.id_tab_friend);
-        mTabContact = (LinearLayout) findViewById(R.id.id_tab_contact);
-        mTabSetting = (LinearLayout) findViewById(R.id.id_tab_setting);
+        mTabWechat = findViewById(R.id.id_tab_wechat);
+        mTabFriend = findViewById(R.id.id_tab_friend);
+        mTabContact = findViewById(R.id.id_tab_contact);
+        mTabSetting = findViewById(R.id.id_tab_setting);
 
-        mImgWechat = (ImageButton) findViewById(R.id.id_tab_wechat_img);
-        mImgFriend = (ImageButton) findViewById(R.id.id_tab_friend_img);
-        mImgContact = (ImageButton) findViewById(R.id.id_tab_contact_img);
-        mImgSetting = (ImageButton) findViewById(R.id.id_tab_setting_img);
+        mImgWechat = findViewById(R.id.id_tab_wechat_img);
+        mImgFriend = findViewById(R.id.id_tab_friend_img);
+        mImgContact = findViewById(R.id.id_tab_contact_img);
+        mImgSetting = findViewById(R.id.id_tab_setting_img);
 
     }
     private void initEvents() {

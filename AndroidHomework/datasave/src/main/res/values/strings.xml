@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">数据存储一</string>
+    <string name="welcome"><font size="20" color="#96408500">欢迎选择DIY</font></string>
+    <string name="username"><font size="17" color="#9f00574b">用  户  名</font></string>
+    <string name="password"><font size="17" color="#9f00574b">密    码</font></string>
+    <string name="makesure"><font size="17" color="#9f00574b">确     认     密    码</font></string>
+    <string name="login"><font size="20" >登     陆</font></string>
+    <string name="register"><font size="20" >注     册</font></string>
+    <string name="r_register"><font size="20" color="#bcf7b24b">注     册</font></string>
+    <string name="sex"><font size="17" >性    别</font></string>
+    <string name="study"><font size="17" >学    历</font></string>
+    <string name="hobbies"><font size="17" >爱    好</font></string>
+    <string name="sing"><font size="15" >唱歌</font></string>
+    <string name="dance"><font size="15" >跳舞</font></string>
+    <string name="basketball"><font size="15" >篮球</font></string>
+    <string name="read"><font size="15" >读书</font></string>
+</resources>

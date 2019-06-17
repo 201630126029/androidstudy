@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="BookStore"></dbname>
+    <version value="3"></version>
+    <list>
+        <mapping class="com.example.shiyan2.Book"></mapping>
+        <mapping class="com.example.shiyan2.Category"></mapping>
+    </list>
+</litepal>

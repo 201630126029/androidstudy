@@ -40,9 +40,9 @@ public class WechatFragment extends Fragment implements ViewPager.OnPageChangeLi
         if(view==null){
             view=inflater.inflate(R.layout.fragment_wechat, null);
 
-            rgChannel=(RadioGroup)view.findViewById(R.id.rgChannel);
-            viewPager=(ViewPager)view.findViewById(R.id.vpNewsList);
-            hvChannel=(HorizontalScrollView)view.findViewById(R.id.hvChannel);
+            rgChannel= view.findViewById(R.id.rgChannel);
+            viewPager= view.findViewById(R.id.vpNewsList);
+            hvChannel= view.findViewById(R.id.hvChannel);
             rgChannel.setOnCheckedChangeListener( //单选按钮的监听事件响应
                     new RadioGroup.OnCheckedChangeListener() {
                         @Override
@@ -73,7 +73,7 @@ public class WechatFragment extends Fragment implements ViewPager.OnPageChangeLi
         for(int i=0;i<channelList.size();i++){//以下添加单选按钮的实例到内导航
             RadioButton rb=(RadioButton)inflater.inflate(R.layout.tab_rb, null);
             rb.setId(i);
-            rb.setText(channelList.get(i).toString());
+            rb.setText(channelList.get(i));
             RadioGroup.LayoutParams params=new
                     RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,
                     RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -96,7 +96,7 @@ public class WechatFragment extends Fragment implements ViewPager.OnPageChangeLi
         for(int i=0;i<channelList.size();i++){
             NewsChannelFragment fragment=new NewsChannelFragment();
             Bundle bundle=new Bundle();
-            bundle.putString("cname", channelList.get(i).toString());
+            bundle.putString("cname", channelList.get(i));
             fragment.setArguments(bundle);
             newsChannelList.add(fragment);
         }
