@@ -24,6 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -44,12 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sendRequest:
-                sendRequestWithHttpUrl();
+                sendRequestWithOkHttp();
             default:
         }
     }
 
-    private void sendRequestWithHttpUrl() {
+    /**
+     * 访问网络
+     */
+    private void sendRequestWithOkHttp() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -64,6 +69,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     parseJsonWithGson(responseData);
+
+//                    okhttp提供了回调，其中因为访问网络不能在主线程中，这里的enqueue是直接新开线程中执行网络请求
+//                    client.newCall(request).enqueue(new Callback() {
+//                        @Override
+//                        public void onFailure(Call call, IOException e) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onResponse(Call call, Response response) throws IOException {
+//
+//                        }
+//                    });
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -85,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * 使用org的json进行转换
+     * @param jsonData 网络返回的数据
+     */
     private void parseJsonWithJsonObject(String jsonData) {
         try {
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -105,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * 使用gson包来进行转化，超级方便
+     * @param jsonData
+     */
     private void parseJsonWithGson(String jsonData) {
         Gson gson = new Gson();
         List<App> apps = gson.fromJson(jsonData, new TypeToken<List<App>>() {

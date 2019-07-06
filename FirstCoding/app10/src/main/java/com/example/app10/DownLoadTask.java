@@ -13,16 +13,32 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * 具体执行下载任务的异步任务
+ */
 public class DownLoadTask extends AsyncTask<String, Integer, Integer> {
+    /**
+     * 下载状态
+     */
     public static final int TYPE_SUCCESS = 0;
     public static final int TYPE_FAILED = 1;
     public static final int TYPE_PAUSED = 2;
     public static final int TYPE_CANCELED = 3;
+    /**
+     * 回调的变量
+     */
     private DownLoadListener mDownloadListener;
     private boolean isPaused = false;
     private boolean isCanceled = false;
+    /**
+     * 上次的进度
+     */
     private int lastProgress;
 
+    /**
+     * 只需要传监听器，下载的地址由任务来决定
+     * @param downloadListener
+     */
     public DownLoadTask(DownLoadListener downloadListener) {
         mDownloadListener = downloadListener;
     }
@@ -39,7 +55,6 @@ public class DownLoadTask extends AsyncTask<String, Integer, Integer> {
             String directory = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOWNLOADS).getPath();
             file = new File(directory + fileName);
-            Log.i("xuanqis", file.getPath());
             if (file.exists()) {
                 downloadLength = file.length();
             }
@@ -57,6 +72,7 @@ public class DownLoadTask extends AsyncTask<String, Integer, Integer> {
             Response response = client.newCall(request).execute();
             if (response != null) {
                 is = response.body().byteStream();
+                //注意这里是随机访问文件，然后seek到指定的字节开始
                 savedFile = new RandomAccessFile(file, "rw");
                 savedFile.seek(downloadLength);
                 byte[] b = new byte[1024];
@@ -109,6 +125,9 @@ public class DownLoadTask extends AsyncTask<String, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer integer) {
+        /**
+         * 根据不同的状态回调对应的方法
+         */
         switch (integer) {
             case TYPE_SUCCESS:
                 mDownloadListener.onSuccess();
@@ -136,9 +155,9 @@ public class DownLoadTask extends AsyncTask<String, Integer, Integer> {
         isCanceled=true;
     }
     /**
-     * 通过url来
+     * 通过url来得到下载的文件的文件长度
      *
-     * @param url
+     * @param url 下载文件的url
      * @return
      * @throws IOException
      */

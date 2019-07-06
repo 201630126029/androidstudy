@@ -1,5 +1,8 @@
 package com.example.app9;
 
+/**
+ * 自定义的回调类
+ */
 public interface HttpCallbackListener {
     /**
      * 服务器成功响应调用
