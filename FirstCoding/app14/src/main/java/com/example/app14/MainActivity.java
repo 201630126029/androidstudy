@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.mtp.MtpStorageInfo;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         //如果原先用过，那么就直接显示这个城市
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if(prefs.getString("weather", null) != null){
+        if (prefs.getString("weather", null) != null) {
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);
             String url = "https://free-api.heweather.net/s6/weather/now?location=beijing" +
@@ -76,3 +79,4 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 }
+

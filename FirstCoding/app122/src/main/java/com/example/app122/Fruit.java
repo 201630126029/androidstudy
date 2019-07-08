@@ -1,4 +1,4 @@
-package com.example.app12;
+package com.example.app122;
 
 public class Fruit {
     private String name;
