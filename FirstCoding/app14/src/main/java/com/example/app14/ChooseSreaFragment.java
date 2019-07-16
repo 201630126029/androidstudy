@@ -39,6 +39,7 @@ import okhttp3.Response;
  * 选择省、市、县的碎片
  */
 public class ChooseSreaFragment extends Fragment {
+    public static final String TAG = "xuanqis";
     /**
      * 当前的选项选的是什么级别
      */
@@ -164,9 +165,10 @@ public class ChooseSreaFragment extends Fragment {
             mListView.setSelection(0);
             currentLevel = LEVEL_PROVINCE;
         } else {
-
             String address = "http://guolin.tech/api/china";
+            Log.i(TAG, "queryProvinces");
             queryFromServer(address, "province");
+            Log.i(TAG, "queryProvinces");
         }
     }
 
@@ -191,7 +193,9 @@ public class ChooseSreaFragment extends Fragment {
         } else {
             int provinceCode = mSelectedProvince.getProvinceCode();
             String address = "http://guolin.tech/api/china/" + provinceCode;
+            Log.i(TAG, "queryCities");
             queryFromServer(address, "city");
+            Log.i(TAG, "queryCities");
         }
     }
 
@@ -216,7 +220,9 @@ public class ChooseSreaFragment extends Fragment {
             int provinceCode = mSelectedProvince.getProvinceCode();
             int cityCode = mSelectedCity.getCityCode();
             String address = "http://guolin.tech/api/china/" + provinceCode + "/" + cityCode;
+            Log.i(TAG, "queryCounties");
             queryFromServer(address, "county");
+            Log.i(TAG, "queryCounties");
         }
     }
 
@@ -239,6 +245,7 @@ public class ChooseSreaFragment extends Fragment {
                         Toast.makeText(getContext(), "加载失败", Toast.LENGTH_LONG).show();
                     }
                 });
+
             }
 
             @Override
