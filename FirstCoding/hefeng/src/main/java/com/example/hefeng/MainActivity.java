@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Now dataObject) {
-                show.setText(new Gson().toJson(dataObject).toString());
+                show.setText(new Gson().toJson(dataObject));
                 //先判断返回的status是否正确，当status正确时获取数据，若status不正确，可查看status对应的Code值找到原因
                 if ( Code.OK.getCode().equalsIgnoreCase(dataObject.getStatus()) ){
                     //此时返回数据

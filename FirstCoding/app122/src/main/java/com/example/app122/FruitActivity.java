@@ -20,18 +20,23 @@ public class FruitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fruit);
+
         Intent intent = getIntent();
         String fruitName = intent.getStringExtra(FRUIT_NAME);
         int fruitImageId = intent.getIntExtra(FRUIT_IMAGE_ID, 0);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
         ImageView fruitImageView = findViewById(R.id.fruit_image_view);
         TextView fruitContentText = findViewById(R.id.fruit_content_text);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         collapsingToolbarLayout.setTitle(fruitName);
         Glide.with(this).load(fruitImageId).into(fruitImageView);
         String fruitContent = generateFruitContent(fruitName);
@@ -39,6 +44,11 @@ public class FruitActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 生成水果的内容
+     * @param fruitName 水果名字，用这个生成
+     * @return 水果的内容
+     */
     private String generateFruitContent(String fruitName) {
         StringBuilder fruitContent = new StringBuilder();
         for (int i = 0; i < 500; i++) {

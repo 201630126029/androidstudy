@@ -27,10 +27,13 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
+    /**
+     * 滑动窗口、刷新工具
+     */
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private Fruit[] mFruits={
+    private Fruit[] mFruits = {
             new Fruit("Apple", R.drawable.apple),
             new Fruit("Banana", R.drawable.banana),
             new Fruit("Pear", R.drawable.pear),
@@ -42,34 +45,36 @@ public class MainActivity extends AppCompatActivity {
             new Fruit("Mango", R.drawable.mango),
             new Fruit("Orange", R.drawable.orange)
     };
-    private List<Fruit> mFruitsList=new ArrayList<>();
+    private List<Fruit> mFruitsList = new ArrayList<>();
     private FruitAdapter mFruitAdapter;
-
-    private int[] mInts={1, 2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //这里一定要将ActionBar换成Toolbar才能达到Material design的效果
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         mDrawerLayout = findViewById(R.id.drawerlayout);
         final NavigationView navView = findViewById(R.id.nav_view);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             //左上的按钮叫做HomeAsUp按钮，设置其可见
             actionBar.setDisplayHomeAsUpEnabled(true);
-//            设置按钮的指示
+//            设置按钮的图标
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
-        Log.i("xuanqis", mInts.toString());
 
+        //悬浮按钮
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /**
-                 * snackbar跟Toast差不多，多了一个按钮
+                 * snackbar跟Toast差不多，多了一个按钮功能
                  */
                 Snackbar.make(v, "Data delete", Snackbar.LENGTH_LONG)
                         .setAction("Undo", new View.OnClickListener() {
@@ -82,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         });
+        //设置call为默认选定的
         navView.setCheckedItem(R.id.nav_call);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -91,15 +97,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //初始化数据并设置RecycleView
         initFruit();
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
-        mFruitAdapter=new FruitAdapter(mFruitsList);
+        mFruitAdapter = new FruitAdapter(mFruitsList);
         recyclerView.setAdapter(mFruitAdapter);
 
-        mSwipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
-        //设置下拉进度条的颜色
+        //设置下拉刷新
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -109,11 +116,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void refreshFruit(){
-        new Thread(new Runnable() {
+    /**
+     * 进行下拉刷新的具体操作
+     */
+    private void refreshFruit() {
+        MyApplication.execute(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     Thread.sleep(2000);
 
                 } catch (InterruptedException e) {
@@ -128,8 +138,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }).start();
+        });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         /**
@@ -168,10 +179,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initFruit(){
+    private void initFruit() {
         mFruitsList.clear();
         for (int i = 0; i < 50; i++) {
-            Random random=new Random();
+            Random random = new Random();
             int index = random.nextInt(mFruits.length);
             mFruitsList.add(mFruits[index]);
         }

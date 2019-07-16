@@ -15,9 +15,17 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+/**
+ * RecycleView的适配器
+ * @author xuanqis
+ */
 public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> {
+    /**
+     * 上下文和数据源
+     */
     private Context mContext;
     private List<Fruit> mFruits;
+
     class ViewHolder extends RecyclerView.ViewHolder {
         CardView mCardView;
         ImageView fruitImage;
@@ -41,6 +49,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
     @NonNull
     @Override
     public FruitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        //context只需要从父布局中得到即可
         if(mContext == null){
             mContext=viewGroup.getContext();
         }
@@ -49,6 +58,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //可以直接得到当前的View Holder是第几个ViewHolder，原先我还以为需要在绑定中设置
                 int position = holder.getAdapterPosition();
                 Fruit fruit = mFruits.get(position);
                 Intent intent = new Intent(mContext, FruitActivity.class);
@@ -62,6 +72,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull FruitAdapter.ViewHolder viewHolder, int i) {
+        //绑定应该理解为将ViewHolder和对应的数据进行绑定
         Fruit fruit = mFruits.get(i);
         viewHolder.fruitName.setText(fruit.getName());
         Glide.with(mContext).load(fruit.getImageId()).into(viewHolder.fruitImage);
