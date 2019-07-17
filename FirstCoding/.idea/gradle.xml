@@ -8,6 +8,20 @@
         </compositeConfiguration>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/app10" />
+            <option value="$PROJECT_DIR$/app11" />
+            <option value="$PROJECT_DIR$/app12" />
+            <option value="$PROJECT_DIR$/app122" />
+            <option value="$PROJECT_DIR$/app13" />
+            <option value="$PROJECT_DIR$/app14" />
+            <option value="$PROJECT_DIR$/app9" />
+            <option value="$PROJECT_DIR$/hefeng" />
+          </set>
+        </option>
         <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>

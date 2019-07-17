@@ -2,6 +2,8 @@ package com.example.app14;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -79,7 +81,7 @@ public class ChooseSreaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("xuanqis", "onCreateView");
+        Log.i(TAG, "onCreateView");
 
         View view = inflater.inflate(R.layout.choose_area, container, false);
         titleView = view.findViewById(R.id.title_text);

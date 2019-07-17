@@ -22,7 +22,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ZWmwqBs8vvGXkG6KdFMOQpU8S91iptLQ" />
@@ -36,7 +37,6 @@
         <service android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote">
-
         </service>
     </application>
 

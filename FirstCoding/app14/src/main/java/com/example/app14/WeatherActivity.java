@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -107,6 +110,43 @@ public class WeatherActivity extends AppCompatActivity {
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         mDrawerLayout=findViewById(R.id.drawerLayout);
         navButton=findViewById(R.id.nav_button);
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View view, float v) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View view) {
+                if (Build.VERSION.SDK_INT >= 21) {
+
+                    //decorView是包括标题在内的window的子控件
+                    View decorView = getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+                    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View view) {
+                if (Build.VERSION.SDK_INT >= 21) {
+
+                    //decorView是包括标题在内的window的子控件
+                    View decorView = getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+                    //设置状态栏透明
+                    getWindow().setStatusBarColor(Color.TRANSPARENT);
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
+
+            }
+        });
         navButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
