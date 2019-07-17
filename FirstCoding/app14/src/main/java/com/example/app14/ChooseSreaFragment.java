@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.app14.abandon.MainActivity;
 import com.example.app14.db.City;
 import com.example.app14.db.County;
 import com.example.app14.db.Province;
@@ -103,21 +102,12 @@ public class ChooseSreaFragment extends Fragment {
                     mSelectedCity = mCities.get(position);
                     //查询该市的所有数据并进行显示
                     queryCounties();
-                }
-                else if(currentLevel == LEVEL_COUNTY){
+                } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = mCounties.get(position).getWeatherId();
-                    if (getActivity() instanceof MainActivity){
-                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                        intent.putExtra("weather_id", weatherId);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                    else if(getActivity() instanceof WeatherActivity){
-                        WeatherActivity activity = (WeatherActivity) getActivity();
-                        activity.mDrawerLayout.closeDrawers();
-                        activity.mSwipeRefresh.setRefreshing(true);
-                        activity.requestWeather(weatherId);
-                    }
+                    WeatherActivity activity = (WeatherActivity) getActivity();
+                    activity.mDrawerLayout.closeDrawers();
+                    activity.mSwipeRefresh.setRefreshing(true);
+                    activity.requestWeather(weatherId);
                 }
             }
         });
@@ -134,8 +124,6 @@ public class ChooseSreaFragment extends Fragment {
 
             }
         });
-        Log.i(MyApplication.AppTag, "diaoyongle ");
-        //第一次选择选泽一个省
         queryProvinces();
     }
 

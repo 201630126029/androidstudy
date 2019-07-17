@@ -15,10 +15,10 @@ import org.json.JSONObject;
 
 public class Utility {
     /**
-     * 处理省级的数据
+     * 处理省级的数据，转化成对应的省对象，然后存入数据库
      *
      * @param response 服务器返回的数据
-     * @return
+     * @return 是否处理成功
      */
     public static boolean handleProvinceResponse(String response) {
         if (!TextUtils.isEmpty(response)) {
@@ -41,11 +41,11 @@ public class Utility {
 
 
     /**
-     * 处理市级的数据
+     * 处理市级的数据，化成对应的对象，然后存入数据库
      *
      * @param response   返回的服务器数据
-     * @param provinceId 数据的市的所属省
-     * @return
+     * @param provinceId 父级行政省的对应的id，注意这个id不是行政机构的id，而是对应的数据库元组的专属id
+     * @return 是否处理成功
      */
     public static boolean handleCityResponse(String response, int provinceId) {
         if (!TextUtils.isEmpty(response)) {
@@ -67,11 +67,11 @@ public class Utility {
         return false;
     }
 
-    /**处理县级的数据，进行存取
+    /**处理县级的数据，化成对应的类，存入数据库中
      *
-     * @param response
-     * @param cityId
-     * @return
+     * @param response 服务器返回的结果
+     * @param cityId 父级行政的对应的id，注意这个id不是行政机构的id，而是对应的数据库元组的专属id
+     * @return 处理是否成功
      */
     public static boolean handleCountyResponse(String response, int cityId) {
         if (!TextUtils.isEmpty(response)) {
@@ -94,6 +94,11 @@ public class Utility {
     }
 
 
+    /**
+     * 解析城市返回的信息，生成对应的天气类
+     * @param response 城市对应的服务器数据
+     * @return 城市对应的天气类
+     */
     public static Weather handleWeatherResponse(String response){
         try{
             JSONObject jsonObject = new JSONObject(response);

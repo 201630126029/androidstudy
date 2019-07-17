@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.RotateAnimation;
@@ -77,6 +78,9 @@ public class WeatherActivity extends AppCompatActivity {
     private ImageView bingPicImg;
 
     public SwipeRefreshLayout mSwipeRefresh;
+    /**
+     * 当前的天气id
+     */
     private String mWeatherId;
 
     public DrawerLayout mDrawerLayout;
@@ -109,15 +113,16 @@ public class WeatherActivity extends AppCompatActivity {
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         mDrawerLayout = findViewById(R.id.drawerLayout);
         navButton = findViewById(R.id.nav_button);
+
         //设置滑动窗口打开和关闭的监听，设置占据状态栏
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
-
             }
 
             @Override
             public void onDrawerOpened(@NonNull View view) {
+                Log.i(MyApplication.AppTag, "打开滑动窗口");
                 if (Build.VERSION.SDK_INT >= 21) {
 
                     View decorView = getWindow().getDecorView();
@@ -153,12 +158,16 @@ public class WeatherActivity extends AppCompatActivity {
         mWeatherId = getIntent().getStringExtra("weather_id");
         weatherLayout.setVisibility(View.INVISIBLE);
         requestWeather(mWeatherId);
+
+        //刷新就是根据城市的weatherid来发起请求，更新天气
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 requestWeather(mWeatherId);
             }
         });
+
+        //如果已经有图片，那么就直接加载，在应用打开的时候，是会直接清空sharedpreference，将会更新图片
         String bingPic = sharedPreferences.getString("bing_pic", null);
         if (bingPic != null) {
             Glide.with(this).load(bingPic).into(bingPicImg);
@@ -208,15 +217,16 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        //显示天气信息完成，再启动更新的服务
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
     }
 
 
     /**
-     * 根据城市的id，得到城市的天气信息
+     * 根据城市的weatherid，向服务器发起请求，并进行显示
      *
-     * @param weatherId
+     * @param weatherId 城市的weatherid
      */
     public void requestWeather(final String weatherId) {
         //请求的网址
@@ -239,22 +249,19 @@ public class WeatherActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
+                //得到城市数据，解析成对应的类
                 final String responseText = response.body().string();
                 final Weather weather = Utility.handleWeatherResponse(responseText);
-                //将数据放入sharedpreference，并更新界面
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (weather != null && "ok".equals(weather.status)) {
-                            SharedPreferences.Editor editor = PreferenceManager
-                                    .getDefaultSharedPreferences(WeatherActivity.this).edit();
-                            editor.putString("weather", responseText);
-                            editor.apply();
                             mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
                         } else {
                             Toast.makeText(WeatherActivity.this,
-                                    "获取天气信息失败", Toast.LENGTH_LONG).show();
+                                    "获取天气信息失败：" + responseText, Toast.LENGTH_LONG).show();
                         }
                         mSwipeRefresh.setRefreshing(false);
                     }
@@ -265,7 +272,7 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     /**
-     * 获取bing的图
+     * 向服务器发起请求，把图片存入sharedpreference并设置为背景
      */
     private void loadBingPic() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";

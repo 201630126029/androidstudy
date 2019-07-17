@@ -10,8 +10,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -25,7 +23,6 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
-import com.example.app14.gson.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,21 +45,25 @@ public class BaiduMapActivity extends AppCompatActivity {
             mMapView=findViewById(R.id.bdmapView);
             mBaiduMap=mMapView.getMap();
             mBaiduMap.setMyLocationEnabled(true);
-            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
-            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this, Manifest.permission.READ_PHONE_STATE)
+            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
+                    Manifest.permission.READ_PHONE_STATE)
                     != PackageManager.PERMISSION_GRANTED) {
                 permissionList.add(Manifest.permission.READ_PHONE_STATE);
             }
-            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
             if (!permissionList.isEmpty()) {
                 String[] permissions = permissionList.toArray(new String[permissionList.size()]);
-                ActivityCompat.requestPermissions(BaiduMapActivity.this, permissions, 1);
+                ActivityCompat.requestPermissions(BaiduMapActivity.this,
+                        permissions, 1);
             }
             else {
                 requestLocation();
@@ -93,13 +94,15 @@ public class BaiduMapActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                               @NonNull int[] grantResults) {
             switch (requestCode){
                 case 1:
                     if(grantResults.length > 0){
                         for (int grantResult : grantResults) {
                             if(grantResult != PackageManager.PERMISSION_GRANTED){
-                                Toast.makeText(BaiduMapActivity.this, "权限禁止将无法正常使用", Toast.LENGTH_LONG).show();
+                                Toast.makeText(BaiduMapActivity.this,
+                                        "权限禁止将无法正常使用", Toast.LENGTH_LONG).show();
                                 finish();
                                 return;
                             }
@@ -107,7 +110,8 @@ public class BaiduMapActivity extends AppCompatActivity {
                         requestLocation();
                     }
                     else {
-                        Toast.makeText(BaiduMapActivity.this, "发生未知错误", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BaiduMapActivity.this, "发生未知错误",
+                                Toast.LENGTH_LONG).show();
                         finish();
                     }
                     break;
@@ -140,9 +144,11 @@ public class BaiduMapActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaiduMapActivity.this);
+                        SharedPreferences sharedPreferences = PreferenceManager
+                                .getDefaultSharedPreferences(BaiduMapActivity.this);
                         sharedPreferences.edit().clear().apply();
-                        Intent intent = new Intent(BaiduMapActivity.this, WeatherActivity.class);
+                        Intent intent = new Intent(BaiduMapActivity.this,
+                                WeatherActivity.class);
                         //百度地图得不到县级的城市代码，只能得到岳麓区的代码，需要进行转换
                         intent.putExtra("weather_id", "CN101250302");
 

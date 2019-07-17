@@ -9,9 +9,9 @@ import okhttp3.Request;
  */
 public class HttpUtil {
     /**
-     * 访问服务器，获取数据
+     * 访问对应的网址，获取数据
      * @param address 网址
-     * @param callback 回调的对象
+     * @param callback 成功和失败回调的对象
      */
     public static void sendOkHttpRequest(String address, okhttp3.Callback callback){
         OkHttpClient client = new OkHttpClient();
