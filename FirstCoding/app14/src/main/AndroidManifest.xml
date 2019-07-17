@@ -44,7 +44,7 @@
             android:exported="true" />
 
         <activity android:name=".WeatherActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".abandon.MainActivity">
 
         </activity>
 

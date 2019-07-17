@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,6 @@ import java.util.List;
 
 public class BaiduMapActivity extends AppCompatActivity {
         public LocationClient mLocationClient;
-        private TextView mPositionText;
         private MapView mMapView;
         private BaiduMap mBaiduMap;
         private boolean isFirstLocale=true;
@@ -43,7 +43,6 @@ public class BaiduMapActivity extends AppCompatActivity {
             setContentView(R.layout.activity_baidu_map);
             mLocationClient = new LocationClient(getApplicationContext());
             mLocationClient.registerLocationListener(new MyLocationListener());
-            mPositionText = findViewById(R.id.position_text_view);
             List<String> permissionList = new ArrayList<>();
 
             mMapView=findViewById(R.id.bdmapView);
@@ -119,6 +118,7 @@ public class BaiduMapActivity extends AppCompatActivity {
 
         private void initLocation(){
             LocationClientOption option = new LocationClientOption();
+            option.setCoorType("bd09ll");
             option.setScanSpan(5000);
             option.setIsNeedAddress(true);
             option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
@@ -140,35 +140,16 @@ public class BaiduMapActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        StringBuilder currentPosition = new StringBuilder();
-                        currentPosition.append("纬度：").append(bdLocation.getLatitude()).append("\n");
-                        currentPosition.append("经度：").append(bdLocation.getLongitude()).append("\n");
-                        currentPosition.append("国家：").append(bdLocation.getCountry()).append("\n");
-                        currentPosition.append("省份：").append(bdLocation.getProvince()).append("\n");
-                        currentPosition.append("市：").append(bdLocation.getCity()).append("\n");
-                        currentPosition.append("县：").append(bdLocation.getCountry()).append("\n");
-                        currentPosition.append("区：").append(bdLocation.getDistrict()).append("\n");
-                        currentPosition.append("街道：").append(bdLocation.getStreet()).append("\n");
-                        currentPosition.append("定位方式：");
-                        if (bdLocation.getLocType() == BDLocation.TypeGpsLocation) {
-                            currentPosition.append("GPS定位");
-                        } else if (bdLocation.getLocType() == BDLocation.TypeNetWorkLocation) {
-                            currentPosition.append("网络");
-                        }
-                        mPositionText.setText(currentPosition);
                         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaiduMapActivity.this);
                         sharedPreferences.edit().clear().apply();
                         Intent intent = new Intent(BaiduMapActivity.this, WeatherActivity.class);
+                        //百度地图得不到县级的城市代码，只能得到岳麓区的代码，需要进行转换
                         intent.putExtra("weather_id", "CN101250302");
+
                         startActivity(intent);
                         finish();
-
                     }
                 });
-                if(bdLocation.getLocType() == BDLocation.TypeGpsLocation
-                        || bdLocation.getLocType() == BDLocation.TypeNetWorkLocation){
-                    navigateTo(bdLocation);
-                }
             }
         }
     }

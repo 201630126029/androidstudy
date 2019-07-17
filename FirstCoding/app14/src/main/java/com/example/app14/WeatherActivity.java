@@ -47,9 +47,16 @@ public class WeatherActivity extends AppCompatActivity {
      */
     private ScrollView weatherLayout;
 
+    /**
+     * 最上面显示的显示的天气所在城市
+     */
     private TextView titleCity;
 
+    /**
+     * 天气的获取时间
+     */
     private TextView titleUpdateTime;
+
 
     private TextView degreeText;
 
@@ -80,16 +87,8 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-
-            //decorView是包括标题在内的window的子控件
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-
-            //设置状态栏透明
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        //设置占据状态栏
+        fitSystem();
 
         setContentView(R.layout.activity_weather);
 
@@ -106,10 +105,11 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText = findViewById(R.id.car_wash_text);
         sportText = findViewById(R.id.sport_text);
         bingPicImg = findViewById(R.id.bing_pic_img);
-        mSwipeRefresh=findViewById(R.id.swipe_refresh);
+        mSwipeRefresh = findViewById(R.id.swipe_refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        mDrawerLayout=findViewById(R.id.drawerLayout);
-        navButton=findViewById(R.id.nav_button);
+        mDrawerLayout = findViewById(R.id.drawerLayout);
+        navButton = findViewById(R.id.nav_button);
+        //设置滑动窗口打开和关闭的监听，设置占据状态栏
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
@@ -120,7 +120,6 @@ public class WeatherActivity extends AppCompatActivity {
             public void onDrawerOpened(@NonNull View view) {
                 if (Build.VERSION.SDK_INT >= 21) {
 
-                    //decorView是包括标题在内的window的子控件
                     View decorView = getWindow().getDecorView();
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
@@ -130,16 +129,7 @@ public class WeatherActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerClosed(@NonNull View view) {
-                if (Build.VERSION.SDK_INT >= 21) {
-
-                    //decorView是包括标题在内的window的子控件
-                    View decorView = getWindow().getDecorView();
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-
-                    //设置状态栏透明
-                    getWindow().setStatusBarColor(Color.TRANSPARENT);
-                }
+                fitSystem();
             }
 
             @Override
@@ -147,6 +137,8 @@ public class WeatherActivity extends AppCompatActivity {
 
             }
         });
+
+        //设置点击右上角打开滑动窗口
         navButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,19 +146,13 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //这里存在SharedPreferences里面的就是服务器中得来的天气数据
-        String weatherString = sharedPreferences.getString("weather", null);
-        if (weatherString != null) {
-            Weather weather = Utility.handleWeatherResponse(weatherString);
-            mWeatherId = weather.basic.weatherId;
-            showWeatherInfo(weather);
-        } else {
-            //没有数据，从服务器获取
-            mWeatherId = getIntent().getStringExtra("weather_id");
-            weatherLayout.setVisibility(View.INVISIBLE);
-            requestWeather(mWeatherId);
-        }
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        //得到县的weatherid，发起请求
+        mWeatherId = getIntent().getStringExtra("weather_id");
+        weatherLayout.setVisibility(View.INVISIBLE);
+        requestWeather(mWeatherId);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -199,7 +185,8 @@ public class WeatherActivity extends AppCompatActivity {
         //去掉所有的View
         forecastLayout.removeAllViews();
         for (Forecast forecast : weather.forecastList) {
-            View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
+            View view = LayoutInflater.from(this)
+                    .inflate(R.layout.forecast_item, forecastLayout, false);
             TextView dateText = view.findViewById(R.id.date_text);
             TextView infoText = view.findViewById(R.id.info_text);
             TextView minText = view.findViewById(R.id.min_text);
@@ -232,14 +219,17 @@ public class WeatherActivity extends AppCompatActivity {
      * @param weatherId
      */
     public void requestWeather(final String weatherId) {
-        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=a6f31634438a4dbc970c7b43bb77c353";
+        //请求的网址
+        String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId +
+                "&key=a6f31634438a4dbc970c7b43bb77c353";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(WeatherActivity.this, "获取天气信息失败", Toast.LENGTH_LONG).show();
+                        Toast.makeText(WeatherActivity.this, "获取城市天气信息失败",
+                                Toast.LENGTH_LONG).show();
                         mSwipeRefresh.setRefreshing(false);
                     }
 
@@ -256,18 +246,19 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (weather != null && "ok".equals(weather.status)) {
-                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
+                            SharedPreferences.Editor editor = PreferenceManager
+                                    .getDefaultSharedPreferences(WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
                             editor.apply();
-                            mWeatherId=weather.basic.weatherId;
+                            mWeatherId = weather.basic.weatherId;
                             showWeatherInfo(weather);
                         } else {
-                            Toast.makeText(WeatherActivity.this, "获取天气信息失败", Toast.LENGTH_LONG).show();
+                            Toast.makeText(WeatherActivity.this,
+                                    "获取天气信息失败", Toast.LENGTH_LONG).show();
                         }
                         mSwipeRefresh.setRefreshing(false);
                     }
                 });
-
             }
         });
         loadBingPic();
@@ -300,5 +291,21 @@ public class WeatherActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    /**
+     * 占据状态栏，将状态栏设置为透明，美化界面效果
+     */
+    private void fitSystem() {
+        if (Build.VERSION.SDK_INT >= 21) {
+
+            //decorView是包括标题在内的window的子控件
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+            //设置状态栏透明
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 }

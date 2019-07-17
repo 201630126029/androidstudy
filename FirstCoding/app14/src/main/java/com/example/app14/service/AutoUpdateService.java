@@ -13,7 +13,12 @@ import com.example.app14.gson.Weather;
 import com.example.app14.util.HttpUtil;
 import com.example.app14.util.Utility;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -90,6 +95,11 @@ public class AutoUpdateService extends Service {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String bingPic = response.body().string();
+
+//                FileOutputStream out = openFileOutput("必应图片.jpg", MODE_PRIVATE);
+//                BufferedWriter write = new BufferedWriter(new OutputStreamWriter(out));
+//                write.write(bingPic);
+
                 SharedPreferences.Editor editor = PreferenceManager
                         .getDefaultSharedPreferences(AutoUpdateService.this)
                         .edit();

@@ -2,8 +2,6 @@ package com.example.app14;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +17,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.app14.abandon.MainActivity;
 import com.example.app14.db.City;
 import com.example.app14.db.County;
 import com.example.app14.db.Province;
-import com.example.app14.gson.Weather;
 import com.example.app14.util.HttpUtil;
 import com.example.app14.util.Utility;
 
@@ -31,23 +29,23 @@ import org.litepal.crud.DataSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
- * 选择省、市、县的碎片
+ * 选择省、市、县的碎片，通过设置级别来做出的不同的反应
  */
 public class ChooseSreaFragment extends Fragment {
-    public static final String TAG = "xuanqis";
     /**
      * 当前的选项选的是什么级别
+     * 1. 省  2. 市  3. 县
      */
     public static final int LEVEL_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
     public static final int LEVEL_COUNTY = 2;
+    private int currentLevel;
 
     private ProgressDialog mProgressDialog;
     /**
@@ -73,16 +71,12 @@ public class ChooseSreaFragment extends Fragment {
      */
     private Province mSelectedProvince;
     private City mSelectedCity;
-    /**
-     * 当前在选什么级别
-     */
-    private int currentLevel;
+
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i(TAG, "onCreateView");
-
+    public View onCreateView(@NonNull LayoutInflater inflater
+            , @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_area, container, false);
         titleView = view.findViewById(R.id.title_text);
         backButton = view.findViewById(R.id.back_button);
@@ -140,6 +134,7 @@ public class ChooseSreaFragment extends Fragment {
 
             }
         });
+        Log.i(MyApplication.AppTag, "diaoyongle ");
         //第一次选择选泽一个省
         queryProvinces();
     }
@@ -168,9 +163,7 @@ public class ChooseSreaFragment extends Fragment {
             currentLevel = LEVEL_PROVINCE;
         } else {
             String address = "http://guolin.tech/api/china";
-            Log.i(TAG, "queryProvinces");
             queryFromServer(address, "province");
-            Log.i(TAG, "queryProvinces");
         }
     }
 
@@ -182,7 +175,8 @@ public class ChooseSreaFragment extends Fragment {
         //这个时候有返回了
         backButton.setVisibility(View.VISIBLE);
         //得到数据
-        mCities = DataSupport.where("provinceid = ?", String.valueOf(mSelectedProvince.getId())).find(City.class);
+        mCities = DataSupport.where("provinceid = ?",
+                String.valueOf(mSelectedProvince.getId())).find(City.class);
         //没有对应的城市
         if (mCities.size() > 0) {
             dataList.clear();
@@ -195,9 +189,7 @@ public class ChooseSreaFragment extends Fragment {
         } else {
             int provinceCode = mSelectedProvince.getProvinceCode();
             String address = "http://guolin.tech/api/china/" + provinceCode;
-            Log.i(TAG, "queryCities");
             queryFromServer(address, "city");
-            Log.i(TAG, "queryCities");
         }
     }
 
@@ -209,7 +201,8 @@ public class ChooseSreaFragment extends Fragment {
         backButton.setVisibility(View.VISIBLE);/**
          * 从数据库或服务器中得到需要显示的省，进行显示
          */
-        mCounties = DataSupport.where("cityid = ?", String.valueOf(mSelectedCity.getId())).find(County.class);
+        mCounties = DataSupport.where("cityid = ?",
+                String.valueOf(mSelectedCity.getId())).find(County.class);
         if (mCounties.size() > 0) {
             dataList.clear();
             for (County county : mCounties) {
@@ -222,9 +215,7 @@ public class ChooseSreaFragment extends Fragment {
             int provinceCode = mSelectedProvince.getProvinceCode();
             int cityCode = mSelectedCity.getCityCode();
             String address = "http://guolin.tech/api/china/" + provinceCode + "/" + cityCode;
-            Log.i(TAG, "queryCounties");
             queryFromServer(address, "county");
-            Log.i(TAG, "queryCounties");
         }
     }
 
