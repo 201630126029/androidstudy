@@ -115,6 +115,7 @@ public class TcpClientActivity extends AppCompatActivity implements View.OnClick
             BufferedReader br = new BufferedReader(new InputStreamReader(
                     mClientSocket.getInputStream()
             ));
+            
             Log.d(TAG, br.toString());
             while (!TcpClientActivity.this.isFinishing()) {
                 Log.d(TAG, "qian");
