@@ -1,0 +1,4 @@
+#Wed Jul 17 19:55:24 CST 2019
+base.0=C\:\\Users\\xuanqis\\AndroidProject\\FirstCoding\\tianqiapi\\build\\intermediates\\transforms\\dexMerger\\debug\\2
+path.0=classes.dex
+renamed.0=classes.dex
