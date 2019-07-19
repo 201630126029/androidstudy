@@ -7,4 +7,6 @@
     <string name="title_activity_tcpserver">TCPServerActivity</string>
     <string name="title_activity_tcpclient">TCPClientActivity</string>
     <string name="title_activity_binder_pool">BinderPoolActivity</string>
+    <string name="msg">说说心里话</string>
+    <string name="send">发送</string>
 </resources>

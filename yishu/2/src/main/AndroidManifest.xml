@@ -7,6 +7,9 @@
         android:name="com.example.a2.permission.ACCESS_BOOK_SERVICE"
         android:protectionLevel="normal" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-permission android:name="com.example.a2.permission.ACCESS_BOOK_SERVICE" />
 
     <application
@@ -17,19 +20,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".contentprovider.ProviderActivity">
+        <activity android:name=".socket.TcpClientActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".contentprovider.BookProvider"
-            android:authorities="com.example.a2.contentprovider.bookprovider"
+        <service
+            android:name=".socket.TCPServerService"
             android:enabled="true"
             android:exported="true"
-            android:process=":provider" />
+            android:process=":remote" />
     </application>
 
 </manifest>

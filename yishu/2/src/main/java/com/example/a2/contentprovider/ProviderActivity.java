@@ -17,10 +17,6 @@ public class ProviderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_provider);
-//        Uri uri = Uri.parse("content://com.example.a2.contentprovider.bookprovider");
-//        getContentResolver().query(uri, null, null, null, null);
-//        getContentResolver().query(uri, null, null, null, null);
-//        getContentResolver().query(uri, null, null, null, null);
 
         Uri bookUri = Uri.parse("content://com.example.a2.contentprovider.bookprovider/book");
         ContentValues values = new ContentValues();
