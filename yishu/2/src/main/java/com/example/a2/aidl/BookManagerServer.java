@@ -2,12 +2,16 @@ package com.example.a2.aidl;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
+
+import com.example.a2.utils.MyConstants;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -42,11 +46,6 @@ public class BookManagerServer extends Service {
     private Binder mBinder = new IBookManager.Stub() {
         @Override
         public List<Book> getBookList() throws RemoteException {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             return mBookLists;
         }
 
@@ -72,6 +71,14 @@ public class BookManagerServer extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        int check=checkCallingOrSelfPermission("com.example.a2.permission.ACCESS_BOOK_SERVICE");
+
+        if (check == PackageManager.PERMISSION_DENIED){
+            Log.d(TAG, "验证失败");
+            return null;
+        }
+
+        Log.d(TAG, "验证成功");
         return mBinder;
     }
 

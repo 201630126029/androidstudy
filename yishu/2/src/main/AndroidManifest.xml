@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.a2">
 
+    <permission
+        android:name="com.example.a2.permission.ACCESS_BOOK_SERVICE"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="com.example.a2.permission.ACCESS_BOOK_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,18 +17,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".aidl.BookManagerActivity">
+        <activity android:name=".contentprovider.ProviderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".aidl.BookManagerServer"
+        <provider
+            android:name=".contentprovider.BookProvider"
+            android:authorities="com.example.a2.contentprovider.bookprovider"
             android:enabled="true"
             android:exported="true"
-            android:process=":remote" />
+            android:process=":provider" />
     </application>
 
 </manifest>
