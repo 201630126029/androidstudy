@@ -38,7 +38,7 @@ public class BinderPool {
      */
     private static volatile BinderPool sInstance;
     /**
-     * 用来控制？？？这里为什么要这个
+     * 用来控制同步，回调onServiceConnected是异步的
      */
     private CountDownLatch mconnectBinderPoolCountDownLatch;
 

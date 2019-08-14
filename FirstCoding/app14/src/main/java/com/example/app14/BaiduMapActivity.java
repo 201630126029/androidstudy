@@ -28,134 +28,132 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaiduMapActivity extends AppCompatActivity {
-        public LocationClient mLocationClient;
-        private MapView mMapView;
-        private BaiduMap mBaiduMap;
-        private boolean isFirstLocale=true;
+    public LocationClient mLocationClient;
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
+    private boolean isFirstLocale = true;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            SDKInitializer.initialize(getApplicationContext());
-            setContentView(R.layout.activity_baidu_map);
-            mLocationClient = new LocationClient(getApplicationContext());
-            mLocationClient.registerLocationListener(new MyLocationListener());
-            List<String> permissionList = new ArrayList<>();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SDKInitializer.initialize(getApplicationContext());
+        setContentView(R.layout.activity_baidu_map);
+        mLocationClient = new LocationClient(getApplicationContext());
+        mLocationClient.registerLocationListener(new MyLocationListener());
+        List<String> permissionList = new ArrayList<>();
 
-            mMapView=findViewById(R.id.bdmapView);
-            mBaiduMap=mMapView.getMap();
-            mBaiduMap.setMyLocationEnabled(true);
-            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            }
-            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
-                    Manifest.permission.READ_PHONE_STATE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionList.add(Manifest.permission.READ_PHONE_STATE);
-            }
-            if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (!permissionList.isEmpty()) {
-                String[] permissions = permissionList.toArray(new String[permissionList.size()]);
-                ActivityCompat.requestPermissions(BaiduMapActivity.this,
-                        permissions, 1);
-            }
-            else {
-                requestLocation();
-            }
-
+        mMapView = findViewById(R.id.bdmapView);
+        mBaiduMap = mMapView.getMap();
+        mBaiduMap.setMyLocationEnabled(true);
+        if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
+                Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ContextCompat.checkSelfPermission(BaiduMapActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!permissionList.isEmpty()) {
+            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(BaiduMapActivity.this,
+                    permissions, 1);
+        } else {
+            requestLocation();
         }
 
-        private void requestLocation(){
-            initLocation();
-            mLocationClient.start();
-        }
+    }
 
-        private void navigateTo(BDLocation location){
-            if(isFirstLocale){
-                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-                mBaiduMap.animateMapStatus(update);
-                update=MapStatusUpdateFactory.zoomTo(19f);
-                mBaiduMap.animateMapStatus(update);
-                isFirstLocale=false;
+    private void requestLocation() {
+        initLocation();
+        mLocationClient.start();
 
-                MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
-                locationBuilder.latitude(location.getLatitude());
-                locationBuilder.longitude(location.getLongitude());
-                MyLocationData locationData = locationBuilder.build();
-                mBaiduMap.setMyLocationData(locationData);
-            }
-        }
+    }
 
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                               @NonNull int[] grantResults) {
-            switch (requestCode){
-                case 1:
-                    if(grantResults.length > 0){
-                        for (int grantResult : grantResults) {
-                            if(grantResult != PackageManager.PERMISSION_GRANTED){
-                                Toast.makeText(BaiduMapActivity.this,
-                                        "权限禁止将无法正常使用", Toast.LENGTH_LONG).show();
-                                finish();
-                                return;
-                            }
-                        }
-                        requestLocation();
-                    }
-                    else {
-                        Toast.makeText(BaiduMapActivity.this, "发生未知错误",
-                                Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+    private void navigateTo(BDLocation location) {
+        if (isFirstLocale) {
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+            mBaiduMap.animateMapStatus(update);
+            update = MapStatusUpdateFactory.zoomTo(19f);
+            mBaiduMap.animateMapStatus(update);
+            isFirstLocale = false;
 
-        private void initLocation(){
-            LocationClientOption option = new LocationClientOption();
-            option.setCoorType("bd09ll");
-            option.setScanSpan(5000);
-            option.setIsNeedAddress(true);
-            option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
-            mLocationClient.setLocOption(option);
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-            mLocationClient.stop();
-            mMapView.onDestroy();
-            mBaiduMap.setMyLocationEnabled(false);
-        }
-
-        class MyLocationListener implements BDLocationListener {
-
-            @Override
-            public void onReceiveLocation(final BDLocation bdLocation) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        SharedPreferences sharedPreferences = PreferenceManager
-                                .getDefaultSharedPreferences(BaiduMapActivity.this);
-                        sharedPreferences.edit().clear().apply();
-                        Intent intent = new Intent(BaiduMapActivity.this,
-                                WeatherActivity.class);
-                        //百度地图得不到县级的城市代码，只能得到岳麓区的代码，需要进行转换
-                        intent.putExtra("weather_id", "CN101250302");
-
-                        startActivity(intent);
-                        finish();
-                    }
-                });
-            }
+            MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
+            locationBuilder.latitude(location.getLatitude());
+            locationBuilder.longitude(location.getLongitude());
+            MyLocationData locationData = locationBuilder.build();
+            mBaiduMap.setMyLocationData(locationData);
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0) {
+                    for (int grantResult : grantResults) {
+                        if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(BaiduMapActivity.this,
+                                    "权限禁止将无法正常使用", Toast.LENGTH_LONG).show();
+                            finish();
+                            return;
+                        }
+                    }
+                    requestLocation();
+                } else {
+                    Toast.makeText(BaiduMapActivity.this, "发生未知错误",
+                            Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void initLocation() {
+        LocationClientOption option = new LocationClientOption();
+        option.setCoorType("bd09ll");
+        option.setScanSpan(5000);
+        option.setIsNeedAddress(true);
+        option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
+        mLocationClient.setLocOption(option);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationClient.stop();
+        mMapView.onDestroy();
+        mBaiduMap.setMyLocationEnabled(false);
+    }
+
+    class MyLocationListener implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(final BDLocation bdLocation) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SharedPreferences sharedPreferences = PreferenceManager
+                            .getDefaultSharedPreferences(BaiduMapActivity.this);
+                    sharedPreferences.edit().clear().apply();
+                    Intent intent = new Intent(BaiduMapActivity.this,
+                            WeatherActivity.class);
+                    //百度地图得不到县级的城市代码，只能得到岳麓区的代码，需要进行转换
+                    intent.putExtra("weather_id", "CN101250302");
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+    }
+}

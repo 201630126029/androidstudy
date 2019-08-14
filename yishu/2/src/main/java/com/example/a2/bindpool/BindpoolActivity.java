@@ -11,6 +11,9 @@ import com.example.a2.R;
 
 public class BindpoolActivity extends AppCompatActivity {
     private static final String TAG ="BinderPoolActivity";
+    /**
+     * Binder连接池中的Binder代理
+     */
     private ISecurityCenter mSecurityCenter;
     private ICompute mCompute;
 
@@ -27,7 +30,9 @@ public class BindpoolActivity extends AppCompatActivity {
     }
 
     private void doWork(){
+        //得到当前进程的Binder连接池
         BinderPool binderPool=BinderPool.getInstance(this);
+
         IBinder securityBinder = binderPool.queryBinder(BinderPool.BIND_SECURITY_CENTER);
         mSecurityCenter=SecurityCenterImpl.asInterface(securityBinder);
         Log.d(TAG, "visit IsecurityBinder");

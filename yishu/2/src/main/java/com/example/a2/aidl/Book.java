@@ -2,6 +2,8 @@ package com.example.a2.aidl;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.TextView;
+
 public class Book implements Parcelable {
     public int booId;
     public String bookName;

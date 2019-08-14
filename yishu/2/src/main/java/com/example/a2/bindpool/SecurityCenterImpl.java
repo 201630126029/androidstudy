@@ -1,7 +1,5 @@
 package com.example.a2.bindpool;
 
-
-import android.os.IBinder;
 import android.os.RemoteException;
 
 public class SecurityCenterImpl extends ISecurityCenter.Stub {

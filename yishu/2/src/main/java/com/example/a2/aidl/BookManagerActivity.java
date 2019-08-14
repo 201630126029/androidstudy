@@ -11,6 +11,7 @@ import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.a2.R;
 import com.example.a2.utils.MyConstants;
@@ -77,6 +78,7 @@ public class BookManagerActivity extends AppCompatActivity {
         //绑定客户端和服务端
         Intent intent = new Intent(this, BookManagerServer.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
     }
 
     @Override
