@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,23 +19,42 @@ import java.util.ArrayList;
  * 一个特殊的LinearLayout,任何放入内部的clickable元素都具有波纹效果，当它被点击的时候，
  * 为了性能，尽量不要在内部放入复杂的元素
  * note: long click listener is not supported current for fix compatible bug.
+ * @author xuanqis
  */
 public class RevealLayout extends LinearLayout implements Runnable {
 
     private static final String TAG = "DxRevealLayout";
     private static final boolean DEBUG = true;
 
+    /**
+     * 画笔
+     */
+
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+    /**
+     * 点击的View的宽高
+     */
     private int mTargetWidth;
     private int mTargetHeight;
+
+    /**
+     * 点击的View的宽与高的最小值和最大值
+     */
     private int mMinBetweenWidthAndHeight;
     private int mMaxBetweenWidthAndHeight;
+
+
     private int mMaxRevealRadius;
     private int mRevealRadiusGap;
     private int mRevealRadius = 0;
+
+    /**
+     * 点击的中心点所在的坐标
+     */
     private float mCenterX;
     private float mCenterY;
+
     private int[] mLocationInScreen = new int[2];
 
     private boolean mShouldDoAnimation = false;
@@ -44,7 +62,8 @@ public class RevealLayout extends LinearLayout implements Runnable {
     private int INVALIDATE_DURATION = 40;
 
     private View mTouchTarget;
-    private DispatchUpTouchEventRunnable mDispatchUpTouchEventRunnable = new DispatchUpTouchEventRunnable();
+    private DispatchUpTouchEventRunnable mDispatchUpTouchEventRunnable =
+            new DispatchUpTouchEventRunnable();
 
     public RevealLayout(Context context) {
         super(context);
@@ -62,8 +81,13 @@ public class RevealLayout extends LinearLayout implements Runnable {
         init();
     }
 
+    /**
+     * 进行初始化工作，设置画笔的颜色
+     */
     private void init() {
+        //有些ViewGroup设置了不能绘制，要将其进行重置
         setWillNotDraw(false);
+        //设置画笔的颜色
         mPaint.setColor(getResources().getColor(R.color.reveal_color));
     }
 
@@ -74,12 +98,17 @@ public class RevealLayout extends LinearLayout implements Runnable {
     }
 
     private void initParametersForChild(MotionEvent event, View view) {
-        mCenterX = event.getX() ;
-        mCenterY = event.getY() ;
+
+        mCenterX = event.getX();
+        mCenterY = event.getY();
+
         mTargetWidth = view.getMeasuredWidth();
         mTargetHeight = view.getMeasuredHeight();
+
         mMinBetweenWidthAndHeight = Math.min(mTargetWidth, mTargetHeight);
         mMaxBetweenWidthAndHeight = Math.max(mTargetWidth, mTargetHeight);
+
+        //
         mRevealRadius = 0;
         mShouldDoAnimation = true;
         mIsPressed = true;
@@ -88,7 +117,7 @@ public class RevealLayout extends LinearLayout implements Runnable {
         int[] location = new int[2];
         view.getLocationOnScreen(location);
         int left = location[0] - mLocationInScreen[0];
-        int transformedCenterX = (int)mCenterX - left;
+        int transformedCenterX = (int) mCenterX - left;
         mMaxRevealRadius = Math.max(transformedCenterX, mTargetWidth - transformedCenterX);
     }
 
@@ -151,6 +180,13 @@ public class RevealLayout extends LinearLayout implements Runnable {
         return super.dispatchTouchEvent(event);
     }
 
+    /**
+     * 得到ViewGroup的点击的点在哪个孩子中
+     * @param view
+     * @param x
+     * @param y
+     * @return 点所在的孩子
+     */
     private View getTouchTarget(View view, int x, int y) {
         View target = null;
         ArrayList<View> TouchableViews = view.getTouchables();
@@ -164,6 +200,13 @@ public class RevealLayout extends LinearLayout implements Runnable {
         return target;
     }
 
+    /**
+     * 判断点击的点(x,y)是否在View内
+     * @param view 判断的View
+     * @param x x坐标
+     * @param y y坐标
+     * @return 点是否在View内
+     */
     private boolean isTouchPointInView(View view, int x, int y) {
         int[] location = new int[2];
         view.getLocationOnScreen(location);
@@ -195,7 +238,7 @@ public class RevealLayout extends LinearLayout implements Runnable {
                 return;
             }
 
-            if (isTouchPointInView(mTouchTarget, (int)event.getRawX(), (int)event.getRawY())) {
+            if (isTouchPointInView(mTouchTarget, (int) event.getRawX(), (int) event.getRawY())) {
                 mTouchTarget.performClick();
             }
         }

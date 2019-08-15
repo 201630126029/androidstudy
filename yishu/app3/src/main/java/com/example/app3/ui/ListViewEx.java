@@ -9,9 +9,10 @@ import android.widget.ListView;
 public class ListViewEx extends ListView {
     private static final String TAG = "ListViewEx";
 
-    private HorizontalScrollViewEx2 mHorizontalScrollViewEx2;
 
-    // 分别记录上次滑动的坐标
+    /**
+     * 分别记录上次滑动的坐标
+     */
     private int mLastX = 0;
     private int mLastY = 0;
 
@@ -29,7 +30,7 @@ public class ListViewEx extends ListView {
 
     public void setHorizontalScrollViewEx2(
             HorizontalScrollViewEx2 horizontalScrollViewEx2) {
-        mHorizontalScrollViewEx2 = horizontalScrollViewEx2;
+//        mHorizontalScrollViewEx2 = horizontalScrollViewEx2;
     }
 
     @Override
@@ -39,15 +40,17 @@ public class ListViewEx extends ListView {
 
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN: {
-            mHorizontalScrollViewEx2.requestDisallowInterceptTouchEvent(true);
+            //把父ViewGroup设为不拦截
+            getParent().requestDisallowInterceptTouchEvent(true);
             break;
         }
         case MotionEvent.ACTION_MOVE: {
             int deltaX = x - mLastX;
             int deltaY = y - mLastY;
             Log.d(TAG, "dx:" + deltaX + " dy:" + deltaY);
+            //父控件进行拦截，注意这里的getParent得到的不一定是个View
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                mHorizontalScrollViewEx2.requestDisallowInterceptTouchEvent(false);
+                getParent().requestDisallowInterceptTouchEvent(false);
             }
             break;
         }

@@ -65,12 +65,16 @@ public class HorizontalScrollViewEx2 extends ViewGroup {
         if (action == MotionEvent.ACTION_DOWN) {
             mLastX = x;
             mLastY = y;
+            //如果动画播放中，那么就拦截掉，进行处理
             if (!mScroller.isFinished()) {
                 mScroller.abortAnimation();
                 return true;
             }
             return false;
-        } else {
+        }
+        //父级执行了拦截的方法，并且父级的Action不是down，
+        //说明是父级来进行处理
+        else {
             return true;
         }
     }
