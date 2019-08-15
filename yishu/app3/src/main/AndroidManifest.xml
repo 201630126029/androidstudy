@@ -19,7 +19,9 @@
         <activity android:name=".DemoActivity_1"/>
         <activity android:name=".DemoActivity_2"/>
         <activity android:name=".TestActivity"/>
-        <activity android:name=".ThirdActivity"/>
+        <activity android:name=".ThirdActivity">
+
+        </activity>
     </application>
 
 </manifest>

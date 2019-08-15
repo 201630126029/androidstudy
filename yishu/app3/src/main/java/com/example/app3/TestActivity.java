@@ -1,8 +1,5 @@
 package com.example.app3;
 
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -15,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * 测试动画滑动、拖动滑动、Edit Text的活动
+ */
 public class TestActivity extends Activity implements OnClickListener,
         OnLongClickListener {
 
@@ -82,16 +81,21 @@ public class TestActivity extends Activity implements OnClickListener,
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            Log.d(TAG, "button1.left=" + mButton1.getLeft());
+            Log.d(TAG, "button1.leftxuanqis=" + mButton1.getLeft());
             Log.d(TAG, "button1.x=" + mButton1.getX());
         }
     }
 
+    /**
+     * 处理Button的点击事件
+     * @param v 点击的View
+     */
     @Override
     public void onClick(View v) {
         if (v == mButton1) {
 
 
+            //设置右移100
             mButton1.setTranslationX(100);
 //
             Log.d(TAG, "button1.left=" + mButton1.getLeft());
@@ -100,14 +104,18 @@ public class TestActivity extends Activity implements OnClickListener,
             //在1000ms的时间内将view从原始位置向右移动100像素，这是属性动画
 //            ObjectAnimator.ofFloat(mButton1, "translationX", 0, 100)
 //                    .setDuration(1000).start();
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mButton1
-                    .getLayoutParams();
-            params.width += 100;
-            params.leftMargin += 100;
-            mButton1.setLayoutParams(params);
-            mButton1.requestLayout();
 
-//
+            //宽度加100， 左外边距加100
+//            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mButton1
+//                    .getLayoutParams();
+//            params.width += 100;
+//            params.leftMargin += 100;
+//            mButton1.setLayoutParams(params);
+//            mButton1.requestLayout();
+
+
+
+//            //控制内容在1000ms内左移
 //            final int startX = 0;
 //            final int deltaX = 100;
 //            ValueAnimator animator = ValueAnimator.ofInt(0,
@@ -121,7 +129,7 @@ public class TestActivity extends Activity implements OnClickListener,
 //            });
 //            animator.start();
 
-//            mHandler.sendEmptyMessageDelayed(MESSAGE_SCROLL_TO, DELAYED_TIME);
+            mHandler.sendEmptyMessageDelayed(MESSAGE_SCROLL_TO, DELAYED_TIME);
         }
     }
 

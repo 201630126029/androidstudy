@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * 进行分流的活动
+ */
 public class MainActivity extends Activity {
 
     @Override

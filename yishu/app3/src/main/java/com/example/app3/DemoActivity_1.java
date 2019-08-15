@@ -35,8 +35,12 @@ public class DemoActivity_1 extends Activity {
     private void initView() {
         LayoutInflater inflater = getLayoutInflater();
         mListContainer = findViewById(R.id.container);
+
+        //得到手机的尺寸信息
         final int screenWidth = MyUtils.getScreenMetrics(this).widthPixels;
         final int screenHeight = MyUtils.getScreenMetrics(this).heightPixels;
+
+        //创建3个ListView进去
         for (int i = 0; i < 3; i++) {
             ViewGroup layout = (ViewGroup) inflater.inflate(
                     R.layout.content_layout, mListContainer, false);
@@ -49,9 +53,13 @@ public class DemoActivity_1 extends Activity {
         }
     }
 
+    /**
+     * 给layout的ListView设置50个TextView的子控件
+     * @param layout
+     */
     private void createList(ViewGroup layout) {
         ListView listView = layout.findViewById(R.id.list);
-        ArrayList<String> datas = new ArrayList<String>();
+        ArrayList<String> datas = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
             datas.add("name " + i);
         }
