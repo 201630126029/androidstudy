@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ListView;
 
+/**
+ * 内部拦截的ListView
+ */
 public class ListViewEx extends ListView {
     private static final String TAG = "ListViewEx";
 
