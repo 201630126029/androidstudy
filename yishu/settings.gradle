@@ -1,1 +1,1 @@
-include ':app', ':2', ':10', ':app3'
+include ':app', ':2', ':10', ':app3', ':app4', ':yishuapp5', ':test', ':yishuapp6', ':yishuapp7', ':yishuapp8', ':yishuapp11', ':yishuapp112', ':yishuapp12', ':yishuapp13', ':yishuapp14', ':yishuapp15'
